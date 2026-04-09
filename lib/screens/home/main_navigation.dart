@@ -370,7 +370,7 @@ class _MainNavigationState extends State<MainNavigation> with SingleTickerProvid
                   svgPath,
                   width: 24,
                   height: 24,
-                  colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                  colorFilter: ColorFilter.mode(color ?? AppTheme.goldColor, BlendMode.srcIn),
                 ),
                 const SizedBox(height: 4),
                 Text(
