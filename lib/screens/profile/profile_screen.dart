@@ -3,13 +3,15 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/simple_app_bar.dart';
-import '../login_screen.dart';
+
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       backgroundColor: isDark ? AppTheme.darkBackground : AppTheme.lightBackground,
       appBar: const SimpleAppBar(title: 'حسابي'),
@@ -26,7 +28,8 @@ class ProfileScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () async {
                 await authProvider.signOut();
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+                // العودة إلى شاشة تسجيل الدخول
+                Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
               },
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red, foregroundColor: Colors.white),
               child: const Text('تسجيل الخروج'),
