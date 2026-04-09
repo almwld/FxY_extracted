@@ -84,3 +84,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/icons/svg/
+
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.19.0
