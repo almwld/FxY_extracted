@@ -52,7 +52,7 @@ class AuthService {
 
   /// تسجيل الدخول باستخدام Google
   Future<AuthResponse> signInWithGoogle() async {
-    return await _supabase.auth.signInWithOAuth(
+    _supabase.auth.signInWithOAuth(
       OAuthProvider.google,
       redirectTo: 'io.supabase.flutterquickstart://login-callback/',
     );
@@ -174,7 +174,7 @@ class AuthService {
     
     await _supabase.storage
         .from('avatars')
-        .upload(fileName, filePath);
+        .upload(fileName, File(filePath));
 
     final url = _supabase.storage
         .from('avatars')

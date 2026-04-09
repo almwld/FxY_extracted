@@ -57,7 +57,7 @@ class _HomeSliderState extends State<HomeSlider> {
                     (slide['color'] as Color).withOpacity(0.8),
                   ],
                   begin: Alignment.topLeft,
-                  end: BottomRight,
+                  end: Alignment.bottomRight,
                 ),
                 borderRadius: BorderRadius.circular(20),
               ),

@@ -174,7 +174,7 @@ class YemenBanks {
   static String? getBankCode(String name) {
     return banks.firstWhere(
       (bank) => bank['name'] == name,
-      orElse: () => {'code': null},
+      orElse: () => {'code': ''},
     )['code'];
   }
 }

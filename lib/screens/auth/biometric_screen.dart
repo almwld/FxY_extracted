@@ -94,8 +94,8 @@ class _BiometricScreenState extends State<BiometricScreen> {
             // الإعدادات
             if (_isSupported) ...[
               SwitchListTile(
-                title: const Text('تفعيل $_biometricType'),
-                subtitle: const Text('استخدم $_biometricType لتسجيل الدخول'),
+                title: Text('تفعيل $_biometricType'),
+                subtitle: Text('استخدم $_biometricType لتسجيل الدخول'),
                 value: true,
                 onChanged: (value) {},
                 activeColor: AppColors.goldColor,

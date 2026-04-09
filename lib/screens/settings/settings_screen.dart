@@ -97,7 +97,7 @@ class SettingsScreen extends StatelessWidget {
           _buildSectionTitle('قانوني'),
           ListTile(
             leading: const Icon(Icons.privacy_tip_outlined),
-            title: const Text(AppStrings.privacyPolicy),
+            title: const Text('سياسة الخصوصية'),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
               Navigator.of(context).pushNamed(AppRoutes.privacyPolicy);

@@ -185,7 +185,7 @@ class ProfileScreen extends StatelessWidget {
       },
       {
         'icon': Icons.support_agent_outlined,
-        'title': AppStrings.helpSupport,
+        'title': 'الدعم',
         'route': AppRoutes.helpSupport,
       },
       {

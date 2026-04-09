@@ -17,8 +17,8 @@ class ProductService {
     var query = _supabase.from('products').select();
 
     if (filter != null) {
-      if (filter.categoryId != null) {
-        query = query.eq('category_id', filter.categoryId);
+      if (filter.categoryId ?? "" != null) {
+        query = query.eq('category_id', filter.categoryId ?? "");
       }
       if (filter.minPrice != null) {
         query = query.gte('price', filter.minPrice);

@@ -36,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _refresh() async {
     final productProvider = context.read<ProductProvider>();
-    await productProvider.loadFeaturedProducts(refresh: true);
+    await productProvider.loadFeaturedProducts();
     await productProvider.loadCategories();
-    await productProvider.loadProducts(refresh: true);
+    await productProvider.loadProducts();
   }
 
   @override
