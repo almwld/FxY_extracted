@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/product_provider.dart';
 import '../../widgets/common/product_card.dart';
+import '../../models/product_model.dart';
 import '../product/category_products_screen.dart';
 import '../all_ads_screen.dart';
 import '../auctions_screen.dart';
