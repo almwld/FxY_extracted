@@ -57,3 +57,6 @@ class ProductModel {
   String get formattedOldPrice => oldPrice != null ? '${oldPrice!.toStringAsFixed(0)} ريال' : '';
   double get discountPercentage => oldPrice != null && oldPrice! > 0 ? ((oldPrice! - price) / oldPrice!) * 100 : 0;
 }
+
+  String? get mainImage => images.isNotEmpty ? images[0] : null;
+  bool get hasDiscount => oldPrice != null && oldPrice! > price;
