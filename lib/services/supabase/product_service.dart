@@ -1,5 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../models/product/product_model.dart';
+import '../../models/product_model.dart';
 
 class ProductService {
   final SupabaseClient _supabase = Supabase.instance.client;
@@ -8,13 +8,14 @@ class ProductService {
     try {
       final response = await _supabase
           .from('products')
-          .select('*, seller:profiles!seller_id(name, avatar_url)')
+          .select('*')
           .eq('is_available', true)
           .order('created_at', ascending: false);
-
+      
       return (response as List).map((p) => ProductModel.fromJson(p)).toList();
     } catch (e) {
-      return _getMockProducts();
+      print('❌ خطأ في جلب المنتجات: $e');
+      return [];
     }
   }
 
@@ -22,28 +23,31 @@ class ProductService {
     try {
       final response = await _supabase
           .from('products')
-          .select('*, seller:profiles!seller_id(name, avatar_url)')
+          .select('*')
           .eq('id', id)
           .single();
       return ProductModel.fromJson(response);
     } catch (e) {
+      print('❌ خطأ في جلب المنتج: $e');
       return null;
     }
   }
 
-  List<ProductModel> _getMockProducts() {
-    return List.generate(10, (index) => ProductModel(
-      id: '${index + 1}',
-      title: 'منتج مميز ${index + 1}',
-      name: 'منتج ${index + 1}',
-      description: 'وصف المنتج رقم ${index + 1}',
-      price: 1000.0 * (index + 1),
-      oldPrice: 1500.0 * (index + 1),
-      images: ['https://picsum.photos/300/300?random=$index'],
-      category: 'electronics',
-      stock: 10,
-      isAvailable: true,
-      createdAt: DateTime.now(),
-    ));
+  Future<void> addProduct(Map<String, dynamic> product) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) throw Exception('يجب تسجيل الدخول');
+    
+    await _supabase.from('products').insert({
+      ...product,
+      'seller_id': userId,
+    });
+  }
+
+  Future<void> updateProduct(String id, Map<String, dynamic> data) async {
+    await _supabase.from('products').update(data).eq('id', id);
+  }
+
+  Future<void> deleteProduct(String id) async {
+    await _supabase.from('products').delete().eq('id', id);
   }
 }
