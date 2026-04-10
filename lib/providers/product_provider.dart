@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/supabase/product_service.dart';
-import '../models/product/product_model.dart';
+import '../models/product_model.dart';
 
 class ProductProvider extends ChangeNotifier {
   final ProductService _productService = ProductService();
