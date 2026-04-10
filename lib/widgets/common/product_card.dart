@@ -1,17 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../theme/app_theme.dart';
-import '../../models/product/product_model.dart';
+import '../../models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  final ProductModel product;
+  final dynamic product;
   final VoidCallback onTap;
-  const ProductCard({super.key, required this.product, required this.onTap});
+  
+  const ProductCard({
+    super.key, 
+    required this.product, 
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final imageUrl = product.images.isNotEmpty ? product.images[0] : '';
+    
+    // استخراج البيانات من المنتج (سواء كان Map أو ProductModel)
+    final String productName = product is Map 
+        ? (product['name'] ?? product['title'] ?? 'منتج') 
+        : (product.name ?? product.title ?? 'منتج');
+    
+    final double productPrice = product is Map 
+        ? (product['price'] ?? 0).toDouble() 
+        : (product.price ?? 0).toDouble();
+    
+    final String imageUrl = product is Map 
+        ? (product['images'] != null && product['images'].isNotEmpty ? product['images'][0] : '')
+        : (product.images != null && product.images.isNotEmpty ? product.images[0] : '');
 
     return GestureDetector(
       onTap: onTap,
@@ -41,9 +58,21 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.name, maxLines: 2, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                  Text(
+                    productName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                  ),
                   const SizedBox(height: 4),
-                  Text(product.formattedPrice, style: TextStyle(color: AppTheme.goldColor, fontWeight: FontWeight.bold, fontSize: 14)),
+                  Text(
+                    '${productPrice.toStringAsFixed(0)} ريال',
+                    style: TextStyle(
+                      color: AppTheme.goldColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
                 ],
               ),
             ),
