@@ -262,6 +262,10 @@ jobs:
         run: flutter pub get
 
       - name: Create .env file
+      - name: Add MiniMax API Key
+        run: |
+          echo "MINIMAX_API_KEY=sk-api-3srQHm600IiTt7ibuFkqWMB62Y2EQHpjwRLyisrT6jZTReILYdyalX-KZnPD_nftvrmNthCmNx3gBnpZdB_0j_YqV4rg0zINGWotoyhHx9sy8vMN9Y-PHJo" >> .env
+          echo "MINIMAX_GROUP_ID=2042590100231037263" >> .env
         run: |
           echo "SUPABASE_URL=https://ziqpohdxtermunnhlkm.supabase.co" > .env
           echo "SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppcXBvaGR4dGVtc211bm5obGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3ODQzNDcsImV4cCI6MjA4NzM2MDM0N30.ABAg5YZSrrAtBTWATJ3eRTmo4BuZVyVlrMV1HZjRWs0" >> .env
