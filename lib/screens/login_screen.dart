@@ -4,7 +4,7 @@ import '../theme/app_theme.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/simple_app_bar.dart';
 import 'register_screen.dart';
-import 'home_screen.dart';
+import 'home/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

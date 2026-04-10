@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/product_provider.dart';
-import '../../widgets/common/section_header.dart';
 import '../../widgets/common/product_card.dart';
 import '../product/category_products_screen.dart';
 import '../all_ads_screen.dart';
@@ -27,6 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
     {'image': 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800', 'title': 'عقارات فاخرة', 'subtitle': 'فلل وشقق', 'categoryId': 'real_estate', 'discount': 'خصم 30%'},
     {'image': 'https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=800', 'title': 'سيارات جديدة', 'subtitle': 'أحدث الموديلات', 'categoryId': 'cars', 'discount': 'خصم 25%'},
     {'image': 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800', 'title': 'إلكترونيات', 'subtitle': 'هواتف وكومبيوترات', 'categoryId': 'electronics', 'discount': 'خصم 40%'},
+  ];
+
+  final List<Map<String, dynamic>> _categories = [
+    {'id': 'real_estate', 'name': 'عقارات', 'icon': Icons.house, 'colorValue': 0xFF2196F3},
+    {'id': 'cars', 'name': 'سيارات', 'icon': Icons.directions_car, 'colorValue': 0xFF4CAF50},
+    {'id': 'electronics', 'name': 'إلكترونيات', 'icon': Icons.electrical_services, 'colorValue': 0xFF9C27B0},
+    {'id': 'fashion', 'name': 'أزياء', 'icon': Icons.checkroom, 'colorValue': 0xFFE91E63},
   ];
 
   @override
@@ -75,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildCarousel(),
               const SizedBox(height: 16),
@@ -141,22 +145,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMainCategories() {
-    final categories = [
-      {'id': 'real_estate', 'name': 'عقارات', 'icon': Icons.house, 'color': 0xFF2196F3},
-      {'id': 'cars', 'name': 'سيارات', 'icon': Icons.directions_car, 'color': 0xFF4CAF50},
-      {'id': 'electronics', 'name': 'إلكترونيات', 'icon': Icons.electrical_services, 'color': 0xFF9C27B0},
-      {'id': 'fashion', 'name': 'أزياء', 'icon': Icons.checkroom, 'color': 0xFFE91E63},
-    ];
-    return SizedBox(height: 100, child: ListView.builder(scrollDirection: Axis.horizontal, padding: const EdgeInsets.symmetric(horizontal: 16), itemCount: categories.length, itemBuilder: (context, index) {
-      final cat = categories[index];
+    return SizedBox(height: 100, child: ListView.builder(scrollDirection: Axis.horizontal, padding: const EdgeInsets.symmetric(horizontal: 16), itemCount: _categories.length, itemBuilder: (context, index) {
+      final cat = _categories[index];
+      final colorValue = cat['colorValue'] as int;
+      final iconData = cat['icon'] as IconData;
+      final catId = cat['id'] as String;
+      final catName = cat['name'] as String;
       return GestureDetector(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CategoryProductsScreen(categoryId: cat['id'], categoryName: cat['name']))),
-        child: Container(width: 80, margin: const EdgeInsets.symmetric(horizontal: 8), child: Column(children: [Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: Color(cat['color']).withOpacity(0.1), shape: BoxShape.circle), child: Icon(cat['icon'], color: Color(cat['color']), size: 30)), const SizedBox(height: 8), Text(cat['name'], style: const TextStyle(fontSize: 12), textAlign: TextAlign.center)])),
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CategoryProductsScreen(categoryId: catId, categoryName: catName))),
+        child: Container(width: 80, margin: const EdgeInsets.symmetric(horizontal: 8), child: Column(children: [Container(padding: const EdgeInsets.all(12), decoration: BoxDecoration(color: Color(colorValue).withOpacity(0.1), shape: BoxShape.circle), child: Icon(iconData, color: Color(colorValue), size: 30)), const SizedBox(height: 8), Text(catName, style: const TextStyle(fontSize: 12), textAlign: TextAlign.center)])),
       );
     }));
   }
 
-  Widget _buildProductsGrid(List<ProductModel> products) {
+  Widget _buildProductsGrid(List<dynamic> products) {
     if (products.isEmpty) {
       return const Padding(padding: EdgeInsets.all(32), child: Center(child: Text('لا توجد منتجات')));
     }
