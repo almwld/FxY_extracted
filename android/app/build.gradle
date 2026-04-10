@@ -27,7 +27,7 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace "com.flexyemen.flex_yemen"
-    compileSdkVersion 34
+    compileSdk 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -45,8 +45,8 @@ android {
 
     defaultConfig {
         applicationId "com.flexyemen.flex_yemen"
-        minSdkVersion 23
-        targetSdkVersion 34
+        minSdk 23
+        targetSdk 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
