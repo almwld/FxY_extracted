@@ -86,3 +86,4 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/icons/svg/
+  http: ^1.2.0
