@@ -4,7 +4,7 @@ import '../../theme/app_theme.dart';
 import '../../models/product_model.dart';
 
 class ProductCard extends StatelessWidget {
-  final dynamic product;
+  final ProductModel product;
   final VoidCallback onTap;
   
   const ProductCard({
@@ -16,19 +16,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
-    // استخراج البيانات من المنتج (سواء كان Map أو ProductModel)
-    final String productName = product is Map 
-        ? (product['name'] ?? product['title'] ?? 'منتج') 
-        : (product.name ?? product.title ?? 'منتج');
-    
-    final double productPrice = product is Map 
-        ? (product['price'] ?? 0).toDouble() 
-        : (product.price ?? 0).toDouble();
-    
-    final String imageUrl = product is Map 
-        ? (product['images'] != null && product['images'].isNotEmpty ? product['images'][0] : '')
-        : (product.images != null && product.images.isNotEmpty ? product.images[0] : '');
+    final imageUrl = product.images.isNotEmpty ? product.images[0] : '';
 
     return GestureDetector(
       onTap: onTap,
@@ -59,14 +47,14 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    productName,
+                    product.name,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${productPrice.toStringAsFixed(0)} ريال',
+                    product.formattedPrice,
                     style: TextStyle(
                       color: AppTheme.goldColor,
                       fontWeight: FontWeight.bold,

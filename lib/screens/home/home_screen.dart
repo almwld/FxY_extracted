@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }));
   }
 
-  Widget _buildProductsGrid(List<dynamic> products) {
+  Widget _buildProductsGrid(List<ProductModel> products) {
     if (products.isEmpty) {
       return const Padding(padding: EdgeInsets.all(32), child: Center(child: Text('لا توجد منتجات')));
     }
