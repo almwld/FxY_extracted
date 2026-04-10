@@ -25,10 +25,6 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Android SDK
-        run: |
-          yes | sdkmanager "platforms;android-34" "build-tools;34.0.0"
-
       - name: Create Android project structure
         run: |
           mkdir -p android/app/src/main/kotlin/com/flexyemen/flex_yemen
@@ -64,7 +60,7 @@ jobs:
           }
           plugins {
               id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-              id "com.android.application" version "8.1.0" apply false
+              id "com.android.application" version "7.4.2" apply false
               id "org.jetbrains.kotlin.android" version "1.9.0" apply false
           }
           include ":app"
@@ -80,7 +76,7 @@ jobs:
                   mavenCentral()
               }
               dependencies {
-                  classpath 'com.android.tools.build:gradle:8.1.0'
+                  classpath 'com.android.tools.build:gradle:7.4.2'
                   classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
               }
           }
@@ -135,12 +131,12 @@ jobs:
               ndkVersion flutter.ndkVersion
 
               compileOptions {
-                  sourceCompatibility JavaVersion.VERSION_17
-                  targetCompatibility JavaVersion.VERSION_17
+                  sourceCompatibility JavaVersion.VERSION_1_8
+                  targetCompatibility JavaVersion.VERSION_1_8
               }
 
               kotlinOptions {
-                  jvmTarget = '17'
+                  jvmTarget = '1_8'
               }
 
               sourceSets {
@@ -180,7 +176,7 @@ jobs:
           distributionPath=wrapper/dists
           zipStoreBase=GRADLE_USER_HOME
           zipStorePath=wrapper/dists
-          distributionUrl=https\://services.gradle.org/distributions/gradle-8.3-all.zip
+          distributionUrl=https\://services.gradle.org/distributions/gradle-7.5-all.zip
           EOF
 
       - name: Create AndroidManifest.xml
