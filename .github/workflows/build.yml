@@ -3,14 +3,12 @@ name: Build Flex Yemen APK
 on:
   push:
     branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,6 +25,10 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Setup Android SDK
+        run: |
+          yes | sdkmanager "platforms;android-34" "build-tools;34.0.0"
+
       - name: Create Android project structure
         run: |
           mkdir -p android/app/src/main/kotlin/com/flexyemen/flex_yemen
@@ -36,15 +38,15 @@ jobs:
 
       - name: Create gradle.properties
         run: |
-          cat > android/gradle.properties << 'GRADLEPROP'
+          cat > android/gradle.properties << 'EOF'
           org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=2g
           android.useAndroidX=true
           android.enableJetifier=true
-          GRADLEPROP
+          EOF
 
       - name: Create settings.gradle
         run: |
-          cat > android/settings.gradle << 'SETTINGS'
+          cat > android/settings.gradle << 'EOF'
           pluginManagement {
               def flutterSdkPath = {
                   def properties = new Properties()
@@ -62,15 +64,15 @@ jobs:
           }
           plugins {
               id "dev.flutter.flutter-plugin-loader" version "1.0.0"
-              id "com.android.application" version "7.4.2" apply false
+              id "com.android.application" version "8.1.0" apply false
               id "org.jetbrains.kotlin.android" version "1.9.0" apply false
           }
           include ":app"
-          SETTINGS
+          EOF
 
       - name: Create build.gradle (project level)
         run: |
-          cat > android/build.gradle << 'PROJECTGRADLE'
+          cat > android/build.gradle << 'EOF'
           buildscript {
               ext.kotlin_version = '1.9.0'
               repositories {
@@ -78,7 +80,7 @@ jobs:
                   mavenCentral()
               }
               dependencies {
-                  classpath 'com.android.tools.build:gradle:7.4.2'
+                  classpath 'com.android.tools.build:gradle:8.1.0'
                   classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
               }
           }
@@ -98,11 +100,11 @@ jobs:
           tasks.register("clean", Delete) {
               delete rootProject.buildDir
           }
-          PROJECTGRADLE
+          EOF
 
       - name: Create app build.gradle
         run: |
-          cat > android/app/build.gradle << 'APPGRADLE'
+          cat > android/app/build.gradle << 'EOF'
           plugins {
               id "com.android.application"
               id "kotlin-android"
@@ -169,28 +171,28 @@ jobs:
           dependencies {
               implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
           }
-          APPGRADLE
+          EOF
 
       - name: Create gradle-wrapper.properties
         run: |
-          cat > android/gradle/wrapper/gradle-wrapper.properties << 'WRAPPER'
+          cat > android/gradle/wrapper/gradle-wrapper.properties << 'EOF'
           distributionBase=GRADLE_USER_HOME
           distributionPath=wrapper/dists
           zipStoreBase=GRADLE_USER_HOME
           zipStorePath=wrapper/dists
           distributionUrl=https\://services.gradle.org/distributions/gradle-8.3-all.zip
-          WRAPPER
+          EOF
 
       - name: Create AndroidManifest.xml
         run: |
-          cat > android/app/src/main/AndroidManifest.xml << 'MANIFEST'
+          cat > android/app/src/main/AndroidManifest.xml << 'EOF'
           <manifest xmlns:android="http://schemas.android.com/apk/res/android">
               <uses-permission android:name="android.permission.INTERNET"/>
               <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
               <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
               <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
               <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
-
+              
               <application
                   android:label="Flex Yemen"
                   android:name="${applicationName}"
@@ -217,21 +219,21 @@ jobs:
                       android:value="2" />
               </application>
           </manifest>
-          MANIFEST
+          EOF
 
       - name: Create MainActivity.kt
         run: |
-          cat > android/app/src/main/kotlin/com/flexyemen/flex_yemen/MainActivity.kt << 'ACTIVITY'
+          cat > android/app/src/main/kotlin/com/flexyemen/flex_yemen/MainActivity.kt << 'EOF'
           package com.flexyemen.flex_yemen
-
+          
           import io.flutter.embedding.android.FlutterActivity
-
+          
           class MainActivity: FlutterActivity()
-          ACTIVITY
+          EOF
 
       - name: Create styles.xml
         run: |
-          cat > android/app/src/main/res/values/styles.xml << 'STYLES'
+          cat > android/app/src/main/res/values/styles.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <resources>
               <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
@@ -241,16 +243,16 @@ jobs:
                   <item name="android:windowBackground">@drawable/launch_background</item>
               </style>
           </resources>
-          STYLES
+          EOF
 
       - name: Create launch_background.xml
         run: |
-          cat > android/app/src/main/res/drawable/launch_background.xml << 'BACKGROUND'
+          cat > android/app/src/main/res/drawable/launch_background.xml << 'EOF'
           <?xml version="1.0" encoding="utf-8"?>
           <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
               <item android:drawable="@android:color/black" />
           </layer-list>
-          BACKGROUND
+          EOF
 
       - name: Create local.properties
         run: |
@@ -262,15 +264,13 @@ jobs:
         run: flutter pub get
 
       - name: Create .env file
-      - name: Add MiniMax API Key
-        run: |
-          echo "MINIMAX_API_KEY=sk-api-3srQHm600IiTt7ibuFkqWMB62Y2EQHpjwRLyisrT6jZTReILYdyalX-KZnPD_nftvrmNthCmNx3gBnpZdB_0j_YqV4rg0zINGWotoyhHx9sy8vMN9Y-PHJo" >> .env
-          echo "MINIMAX_GROUP_ID=2042590100231037263" >> .env
         run: |
           echo "SUPABASE_URL=https://ziqpohdxtermunnhlkm.supabase.co" > .env
           echo "SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InppcXBvaGR4dGVtc211bm5obGttIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3ODQzNDcsImV4cCI6MjA4NzM2MDM0N30.ABAg5YZSrrAtBTWATJ3eRTmo4BuZVyVlrMV1HZjRWs0" >> .env
           echo "APP_NAME=Flex Yemen" >> .env
           echo "APP_VERSION=1.0.0" >> .env
+          echo "MINIMAX_API_KEY=sk-api-3srQHm600IiTt7ibuFkqWMB62Y2EQHpjwRLyisrT6jZTReILYdyalX-KZnPD_nftvrmNthCmNx3gBnpZdB_0j_YqV4rg0zINGWotoyhHx9sy8vMN9Y-PHJo" >> .env
+          echo "MINIMAX_GROUP_ID=2042590100231037263" >> .env
 
       - name: Build APK
         run: flutter build apk --release --split-per-abi
