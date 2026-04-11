@@ -31,6 +31,24 @@ jobs:
           mkdir -p android/gradle/wrapper
           mkdir -p android/app/src/main/res/values
           mkdir -p android/app/src/main/res/drawable
+          mkdir -p android/app/src/main/res/mipmap-hdpi
+          mkdir -p android/app/src/main/res/mipmap-mdpi
+          mkdir -p android/app/src/main/res/mipmap-xhdpi
+          mkdir -p android/app/src/main/res/mipmap-xxhdpi
+          mkdir -p android/app/src/main/res/mipmap-xxxhdpi
+
+      - name: Create simple icon
+        run: |
+          # إنشاء أيقونة بسيطة باستخدام convert (ImageMagick)
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+          
+          # إنشاء أيقونة ذهبية بسيطة
+          convert -size 512x512 xc:'#D4AF37' -fill black -gravity center -pointsize 200 -annotate 0 "F" android/app/src/main/res/mipmap-hdpi/ic_launcher.png
+          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-mdpi/
+          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-xhdpi/
+          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-xxhdpi/
+          cp android/app/src/main/res/mipmap-hdpi/ic_launcher.png android/app/src/main/res/mipmap-xxxhdpi/
 
       - name: Create gradle.properties
         run: |
