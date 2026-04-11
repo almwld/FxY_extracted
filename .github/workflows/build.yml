@@ -25,17 +25,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Setup Flutter Root
-        run: |
-          echo "FLUTTER_ROOT=$(which flutter | sed 's/\/bin\/flutter//')" >> $GITHUB_ENV
-
-      - name: Create local.properties
+      - name: Create Android project structure
         run: |
           mkdir -p android/app/src/main/kotlin/com/flexyemen/flex_yemen
           mkdir -p android/gradle/wrapper
           mkdir -p android/app/src/main/res/values
           mkdir -p android/app/src/main/res/drawable
-          echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" > android/local.properties
 
       - name: Create gradle.properties
         run: |
@@ -103,7 +98,7 @@ jobs:
           }
           EOF
 
-      - name: Create app build.gradle
+      - name: Create app build.gradle with namespace
         run: |
           cat > android/app/build.gradle << 'EOF'
           def localProperties = new Properties()
@@ -134,7 +129,8 @@ jobs:
           apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
           android {
-              compileSdkVersion 34
+              namespace "com.flexyemen.flex_yemen"
+              compileSdk 34
               ndkVersion flutter.ndkVersion
 
               compileOptions {
@@ -152,8 +148,8 @@ jobs:
 
               defaultConfig {
                   applicationId "com.flexyemen.flex_yemen"
-                  minSdkVersion 23
-                  targetSdkVersion 34
+                  minSdk 23
+                  targetSdk 34
                   versionCode flutterVersionCode.toInteger()
                   versionName flutterVersionName
               }
@@ -189,11 +185,11 @@ jobs:
       - name: Create AndroidManifest.xml
         run: |
           cat > android/app/src/main/AndroidManifest.xml << 'EOF'
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+              package="com.flexyemen.flex_yemen">
               <uses-permission android:name="android.permission.INTERNET"/>
               <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
               <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-              <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
               
               <application
                   android:label="Flex Yemen"
@@ -255,6 +251,12 @@ jobs:
               <item android:drawable="@android:color/black" />
           </layer-list>
           EOF
+
+      - name: Create local.properties
+        run: |
+          echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
+          echo "flutter.versionName=1.0.0" >> android/local.properties
+          echo "flutter.versionCode=1" >> android/local.properties
 
       - name: Get Flutter dependencies
         run: flutter pub get
